@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admins page</title>
+</head>
+<body>
+<h1>Hello Admin!</h1>
+<br/>
+<br/>
+
+<h2 style="color: green">Table of users</h2>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <table>
+        <th:block th:each="person : ${people}">
+            <tr>
+                <h3>
+                    <a th:href="@{/admin/{id}(id=${person.getId()})}" th:text="${person.getUsername()}">user</a>
+                    <a th:href="@{/admin/{id}(id=${person.getId()})}" th:text="${person.getSurname()}">user</a>
+                    <br/>
+                </h3>
+            </tr>
+        </th:block>
+    </table>
+</div>
+<br/>
+<table>
+    <th:block>
+        <tr>
+            <td>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <input type="button" value="Add User"
+                           onclick="window.location.href = 'admin/new'">
+                </div>
+            </td>
+            <td>
+                <input type="button" value="Logout"
+                       onclick="window.location.href = '/logout'">
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+<br>
+<br>
+
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <tr>
+        <td>
+            <input type="button" value="USER"
+                   onclick="window.location.href = '/user'">
+        </td>
+    </tr>
+</div>
+
+</body>
+</html>

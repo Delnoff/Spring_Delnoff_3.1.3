@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>User page</title>
+</head>
+<body>
+
+<h1>User Info</h1>
+<br/>
+<table>
+
+    <tr>
+        <th><h3>Name | </h3></th>
+        <th><h3>Surname | </h3></th>
+        <th><h3>Age</h3></th>
+        <th><h3>Role</h3></th>
+    </tr>
+
+    <th:block>
+        <tr>
+            <td th:text="${person.getUsername()}">val</td>
+            <td th:text="${person.getSurname()}">val</td>
+            <td th:text="${person.getAge()}">val</td>
+            <td th:text="${person.getRole()}">val</td>
+            <br/>
+        </tr>
+    </th:block>
+
+</table>
+
+<br/>
+<br/>
+
+<table>
+    <th:block>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <tr>
+                <td>
+                    <form th:action="@{/admin/{id}/edit(id=${person.getId()})}">
+                        <input type="submit" value="Update">
+                    </form>
+                </td>
+
+                <td>
+                    <form th:method="DELETE" th:action="@{/admin/{id}(id=${person.getId()})}">
+                        <input type="submit" value="Delete"/>
+                    </form>
+                </td>
+            </tr>
+        </div>
+
+        <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
+            <tr>
+                <td>
+                    <input type="button" value="Logout"
+                           onclick="window.location.href = '/logout'">
+                </td>
+            </tr>
+        </div>
+    </th:block>
+
+</table>
+
+<br>
+<br>
+
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <tr>
+        <td>
+            <input type="button" value="ADMIN"
+                   onclick="window.location.href = '/admin'">
+        </td>
+    </tr>
+</div>
+
+
+</body>
+</html>
