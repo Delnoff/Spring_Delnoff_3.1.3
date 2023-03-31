@@ -1,26 +1,31 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class UserDaoImp implements UserDao {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserDaoImp(EntityManager entityManager, PasswordEncoder passwordEncoder) {
+        this.entityManager = entityManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public void create(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         entityManager.persist(user);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<User> read() {
         return entityManager.createQuery("from User").getResultList();
     }
